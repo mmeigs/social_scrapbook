@@ -22,14 +22,12 @@ export default function MainContainer() {
           lastname: res.data.users.lastname,
           profilephoto: res.data.users.profilephoto,
         }
-        // let eventsInfo = res.data.events;
-        let eventsInfoFirst = res.data.events;
+
+        // let eventsInfoFirst = res.data.events;
         let eventsInfo = [];
-        eventsInfoFirst.map((event) => {
+        res.data.events.map((event) => {
           axios.get(`/api/photo?title=${event.eventtitle}`)
           .then((res) => {
-            console.log('Inside mapping fetches!!', res.data)
-            // console.log(res.body.url)
             if (res.data) {
               eventsInfo.push({...event, eventpic: res.data.url})
             } else eventsInfo.push(event)

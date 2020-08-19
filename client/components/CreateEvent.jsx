@@ -22,9 +22,10 @@ export default function CreateEvent({ addEvent }) {
   const [formData, updateFormData] = React.useState(initialFormData);
   const [dateTime, onChange] = useState(new Date());
   const [show, setShow] = useState(false);
-  // const []
+
   const [previewSource, setPreviewSource] = useState('');
-  const [selectedFile, setSelectedFile] = useState('');
+  // const [selectedFile, setSelectedFile] = useState('');
+
   //handles any change tot he form and updates the state
   const handleChange = (e) => {
     updateFormData({
@@ -47,17 +48,21 @@ export default function CreateEvent({ addEvent }) {
 
   const handlePhoto = (e) => {
     const file = e.target.files[0];
-    setSelectedFile(file);
-    previewFile(file);
-  }
-
-  const previewFile = (file) => {
+    // previewFile(file);
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
       setPreviewSource(reader.result);
     }
   }
+
+  // const previewFile = (file) => {
+  //   const reader = new FileReader();
+  //   reader.readAsDataURL(file);
+  //   reader.onloadend = () => {
+  //     setPreviewSource(reader.result);
+  //   }
+  // }
 
 
   const uploadImage = async (base64EncodedImage) => {
@@ -112,6 +117,7 @@ export default function CreateEvent({ addEvent }) {
               <Form.Label>Event Photo</Form.Label> 
               <Form.Control name='eventphoto' type='file' onChange={handlePhoto}  />
             </Form.Group>
+            
             {previewSource && (
               <img src={previewSource} alt="chosen" style={{height: '300px'}} />
             )}

@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLocationArrow } from '@fortawesome/free-solid-svg-icons'
 
 export default function Event(props) {
-  console.log('omg is it there??', props.eventpic)
 
   return (
     <>
