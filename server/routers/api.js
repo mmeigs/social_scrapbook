@@ -6,6 +6,10 @@ const cookieController = require('../controllers/cookieController');
 const eventController = require('../controllers/eventController');
 const loginController = require('../controllers/loginController');
 
+const { cloudinary } = require('../utils/cloudinary.js');
+
+
+
 // EXISING USER LOGIN
 
 router.get('/login',
@@ -84,5 +88,45 @@ router.get('/events', // SWITCH THIS TO A GET REQUEST!!
     return res.status(200).json(res.locals.allEventsInfo);
   }
 )
+
+// UPLOAD A PHOTO TO CLOUDINARY API
+
+router.post('/photo', async (req, res, next) => {
+  try {
+    const fileStr = req.body.data;
+    const { eventtitle } = req.body;
+    const uploadedResponse = await cloudinary.uploader.upload(fileStr, { upload_preset: 'social_scrapbook_2', public_id: `${eventtitle}`})
+    res.json(uploadedResponse)
+  } catch (err) {
+    console.log('theres a problem')
+    console.log(err);
+    res.status(400).json({msg: 'Photo upload went wrong in api router middleware!'})
+  }
+})
+
+// FETCH ALL PHOTOS FROM CLOUDINARY API
+
+router.get('/allphotos', async (req, res, next) => {
+  const { resources } = await cloudinary.search
+    .expression('folder: social_scrapbook_2')
+    .sort_by('public_id', 'desc')
+    .max_results(30)
+    .execute();
+  const publicIds = resources.map(file => file.public_id);
+  res.json({ ids: publicIds });
+})
+
+// FETCH SPECIFIC PHOTO FROM CLOUDINARY API
+
+router.get('/photo', async (req, res, next) => {
+  console.log('hiiii')
+  const eventtitle = req.query.title;
+  console.log('back end got title ', eventtitle)
+  const { resources } = await cloudinary.search
+    .expression(`public_id: social_scrapbook_2/${eventtitle}`)
+    .execute();
+  console.log(resources[0]);
+  res.json(resources[0]);
+})
 
 module.exports = router;

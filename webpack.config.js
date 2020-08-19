@@ -56,6 +56,10 @@ module.exports = {
         target: 'http://localhost:3000',
         secure: false,
       },
+      '/photo/**': {
+        target: 'http://localhost:3000',
+        secure: false,
+      }
     },
     hot: true,
   },
